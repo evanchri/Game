@@ -12,6 +12,8 @@ var speed = 5;
 
 var debug = false;
 
+var enemies = [];
+
 // Key Pressed Funtion
 document.addEventListener('keydown', function(event) {
     if(event.keyCode == 37) {
@@ -29,7 +31,9 @@ document.addEventListener('keydown', function(event) {
     if(event.keyCode == 77) {
       debug = !debug;
     }
-
+    if(event.keyCode == 78) {
+      createBasicEnemy();
+    }
 });
 
 // Key Released Function
@@ -50,8 +54,8 @@ document.addEventListener('keyup', function(event) {
 
 
 // This function is our tick method meaning it runs every 5 milliseconds, and keeps track of everything that is going on
-var tick = setInterval(frame, 5);
-function frame() {
+var update = setInterval(tick, 5);
+function tick() {
 
   movement();
 
@@ -69,12 +73,6 @@ function movement()
 
   xPos = clamp(xPos, 0, window.innerWidth - 50);
   yPos = clamp(yPos, 0, window.innerHeight - 50);
-  // if(xPos < 0){
-  //   xPos = 0;
-  // }else if(xPos > window.innerWidth - 50){
-  //   xPos = window.innerWidth - 50;
-  // }
-  //
 
   if(debug)   info(xPos, yPos);
   if(!debug)  reset_info();
@@ -110,8 +108,27 @@ function reset_info()
 {
   var info = document.getElementById("info");
   info.style.backgroundColor = "transparent"
-  info.innerHTML = null;
+  info.innerHTML = "";
+}
+
+function createBasicEnemy()
+{
+  var element = document.getElementById("background")
+  var basicEnemy = document.createElement("div");
+
+  var node = document.createTextNode("");
+  basicEnemy.appendChild(node);
+  basicEnemy.style.backgroundColor = "red";
+  basicEnemy.style.position = "absolute";
+  basicEnemy.style.width = 25 + "px";
+  basicEnemy.style.height = 25 + "px";
+  basicEnemy.style.top = Math.round(Math.random() * window.innerHeight) + "px";
+  basicEnemy.style.left = Math.round(Math.random() * window.innerWidth) + "px";
 
 
+  var placeHolder = document.getElementById("player");
+  element.insertBefore(basicEnemy, placeHolder);
+
+  enemies.append(basicEnemy);
 
 }

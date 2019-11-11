@@ -11,7 +11,7 @@ html
   height: 100vh;
   margin-left: -8px;
   margin-top: -8px;
-  background-color: yellow;
+  background-color: transparent;
 }
 
 /* This is the player character */
@@ -24,4 +24,9 @@ html
   background-color: blue;
   position: absolute;
 
+}
+
+#info
+{
+  color:white;
 }
