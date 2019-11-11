@@ -1,7 +1,9 @@
 /* This hides the scroll bars enabling the background to look full */
 html
 {
+  background-color: black;
   overflow:hidden;
+
 }
 
 /* This is the background of the game */
@@ -11,7 +13,8 @@ html
   height: 100vh;
   margin-left: -8px;
   margin-top: -8px;
-  background-color: Black;
+  background-image: url("background.png");
+  background-attachment: fixed;
 }
 
 /* This is the player character */

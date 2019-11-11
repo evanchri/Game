@@ -93,17 +93,17 @@ function update() {
 function spawner(time)
 {
 
-  if(timer % 2000 == 500)
+  if(timer % 250 == 50)
   {
     createBasicEnemy();
   }
 
-  if(timer % 4000 == 1200)
+  if(timer % 1000 == 500)
   {
     createFastEnemy();
   }
 
-  if(timer % 6000 == 1800)
+  if(timer % 2000 == 1000)
   {
     createSlowEnemy();
   }
@@ -114,7 +114,7 @@ function enemyUpdate()
   var player = document.getElementById("player");
   var px = player.offsetLeft;
   var py = player.offsetTop;
-  speed = 8 + .05 * enemies.length;
+  speed = 8 + enemies.length;
   for(i = 0; i < enemies.length; i++)
   {
     var enemy = enemies[i];
@@ -157,8 +157,12 @@ function enemyMovement(enemy)
     enemy.data["yVel"] *= -1;
   }
 
-  x += enemy.data["xVel"];
-  y += enemy.data["yVel"];
+  if(enemy.data["xVel"] < 0)  x += (enemy.data["xVel"] - enemies.length);
+  else if(enemy.data["xVel"] >= 0)  x += (enemy.data["xVel"] + enemies.length);
+
+
+  if(enemy.data["yVel"] < 0) y += (enemy.data["yVel"] - enemies.length);
+  else if(enemy.data["yVel"] >= 0) y += (enemy.data["yVel"] + enemies.length);
 
   enemy.style.left = x + "px";
   enemy.style.top = y + "px";
@@ -291,7 +295,7 @@ function createSlowEnemy()
 
   var node = document.createTextNode("");
   slowEnemy.appendChild(node);
-  slowEnemy.style.backgroundColor = "#3dd82f";
+  slowEnemy.style.backgroundColor = "#orange";
   slowEnemy.style.position = "absolute";
   slowEnemy.style.width = 32 + "px";
   slowEnemy.style.height = 32 + "px";
