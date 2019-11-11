@@ -93,17 +93,17 @@ function update() {
 function spawner(time)
 {
 
-  if(timer % 250 == 50)
+  if(timer % 1000 == 100)
   {
     createBasicEnemy();
   }
 
-  if(timer % 1000 == 500)
+  if(timer % 3000 == 1000)
   {
     createFastEnemy();
   }
 
-  if(timer % 2000 == 1000)
+  if(timer % 5000 == 3000)
   {
     createSlowEnemy();
   }
@@ -157,12 +157,12 @@ function enemyMovement(enemy)
     enemy.data["yVel"] *= -1;
   }
 
-  if(enemy.data["xVel"] < 0)  x += (enemy.data["xVel"] - enemies.length);
-  else if(enemy.data["xVel"] >= 0)  x += (enemy.data["xVel"] + enemies.length);
+  if(enemy.data["xVel"] < 0)  x += (enemy.data["xVel"] - enemies.length * .01);
+  else if(enemy.data["xVel"] >= 0)  x += (enemy.data["xVel"] + enemies.length * .01);
 
 
-  if(enemy.data["yVel"] < 0) y += (enemy.data["yVel"] - enemies.length);
-  else if(enemy.data["yVel"] >= 0) y += (enemy.data["yVel"] + enemies.length);
+  if(enemy.data["yVel"] < 0) y += (enemy.data["yVel"] - enemies.length * .01);
+  else if(enemy.data["yVel"] >= 0) y += (enemy.data["yVel"] + enemies.length * .01);
 
   enemy.style.left = x + "px";
   enemy.style.top = y + "px";
@@ -295,13 +295,13 @@ function createSlowEnemy()
 
   var node = document.createTextNode("");
   slowEnemy.appendChild(node);
-  slowEnemy.style.backgroundColor = "#orange";
+  slowEnemy.style.backgroundColor = "orange";
   slowEnemy.style.position = "absolute";
   slowEnemy.style.width = 32 + "px";
   slowEnemy.style.height = 32 + "px";
   slowEnemy.style.top = 128 + (Math.round(Math.random() * window.innerHeight - 256)) + "px";
   slowEnemy.style.left = 128 + (Math.round(Math.random() * window.innerWidth - 256)) + "px";
-  slowEnemy.data = {"size" : 32, "xVel" : 5, "yVel" : 5, "damage" : .5};
+  slowEnemy.data = {"size" : 32, "xVel" : 3, "yVel" : 3, "damage" : 2};
 
   var placeHolder = document.getElementById("player");
   element.insertBefore(slowEnemy, placeHolder);
