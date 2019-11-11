@@ -49,7 +49,7 @@ document.addEventListener('keyup', function(event) {
 var tick = setInterval(frame, 5);
 function frame() {
   var player = document.getElementById("player");
-  var info = document.getElementById("info");
+  // var info = document.getElementById("info");
 
   xOffset = left + right;
   yOffset = up + down;
@@ -57,7 +57,7 @@ function frame() {
   var xPos = player.offsetLeft + xOffset;
   var yPos = player.offsetTop + yOffset;
 
-  info.innerHTML = "X: " + xPos + "<br> Y: " + yPos;
+  // info.innerHTML = "X: " + xPos + "<br> Y: " + yPos;
 
   player.style.left = xPos + "px";
   player.style.top = yPos + "px";
