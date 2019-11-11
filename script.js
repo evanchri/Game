@@ -98,7 +98,7 @@ function spawner(time)
     createBasicEnemy();
   }
 
-  if(timer % 3000 == 1000)
+  if(timer % 2300 == 1000)
   {
     createFastEnemy();
   }
@@ -107,6 +107,12 @@ function spawner(time)
   {
     createSlowEnemy();
   }
+
+  if(timer == 5000 || timer == 2500)
+  {
+    createSmartEnemy();
+  }
+
 }
 
 function enemyUpdate()
@@ -114,12 +120,12 @@ function enemyUpdate()
   var player = document.getElementById("player");
   var px = player.offsetLeft;
   var py = player.offsetTop;
-  speed = 8 + enemies.length;
+  speed = 8 + enemies.length * .1;
   for(i = 0; i < enemies.length; i++)
   {
     var enemy = enemies[i];
     collision(enemy, px, py);
-    enemyMovement(enemy);
+    enemyMovement(enemy, player);
   }
 }
 
@@ -144,28 +150,56 @@ function playerMovement()
 
 }
 
-function enemyMovement(enemy)
+function enemyMovement(enemy, player)
 {
-  var x = enemy.offsetLeft;
-  var y = enemy.offsetTop;
-  if(x < 0 || x > window.innerWidth - enemy.data["size"])
+
+  var ex = enemy.offsetLeft;
+  var ey = enemy.offsetTop;
+  var px = player.offsetLeft;
+  var py = player.offsetTop;
+
+  if(enemy.data['id'] != "smart")
   {
-    enemy.data["xVel"] *= -1;
+    if(ex < 0 || ex > window.innerWidth - enemy.data["size"])
+    {
+      enemy.data["xVel"] *= -1;
+    }
+    if(ey < 0 || ey > window.innerHeight - enemy.data["size"])
+    {
+      enemy.data["yVel"] *= -1;
+    }
+
+    if(enemy.data["xVel"] < 0)  ex += (enemy.data["xVel"] - enemies.length * .05);
+    else if(enemy.data["xVel"] >= 0)  ex += (enemy.data["xVel"] + enemies.length * .05);
+
+    if(enemy.data["yVel"] < 0) ey += (enemy.data["yVel"] - enemies.length * .05);
+    else if(enemy.data["yVel"] >= 0) ey += (enemy.data["yVel"] + enemies.length * .05);
+
+    enemy.style.left = ex + "px";
+    enemy.style.top = ey + "px";
   }
-  if(y < 0 || y > window.innerHeight - enemy.data["size"])
+  else
   {
-    enemy.data["yVel"] *= -1;
+    var dx = (px+24) - (ex + enemy.data['size'] / 2);
+    var dy = (py+24) - (ey + enemy.data['size'] / 2);
+
+    var aa = 0;
+
+    if(dx <= 0) aa = Math.PI - Math.atan(dy/dx);
+    if(dx > 0) aa = 2*Math.PI - Math.atan(dy/dx);
+
+    var xx = Math.cos(aa) * enemy.data["speed"];
+    var yy = Math.sin(aa) * enemy.data["speed"];
+
+    console.log("XX: " + xx +" YY: " + yy);
+
+    ex += xx;
+    ey -= yy;
+
+    enemy.style.left = ex + "px";
+    enemy.style.top = ey + "px";
+
   }
-
-  if(enemy.data["xVel"] < 0)  x += (enemy.data["xVel"] - enemies.length * .01);
-  else if(enemy.data["xVel"] >= 0)  x += (enemy.data["xVel"] + enemies.length * .01);
-
-
-  if(enemy.data["yVel"] < 0) y += (enemy.data["yVel"] - enemies.length * .01);
-  else if(enemy.data["yVel"] >= 0) y += (enemy.data["yVel"] + enemies.length * .01);
-
-  enemy.style.left = x + "px";
-  enemy.style.top = y + "px";
 }
 
 function collision(enemy, px, py)
@@ -259,7 +293,7 @@ function createBasicEnemy()
   basicEnemy.style.height = 32 + "px";
   basicEnemy.style.top = 128 + (Math.round(Math.random() * window.innerHeight - 256)) + "px";
   basicEnemy.style.left = 128 + (Math.round(Math.random() * window.innerWidth - 256)) + "px";
-  basicEnemy.data = {"size" : 32, "xVel" : 7, "yVel" : 7, "damage" : 1};
+  basicEnemy.data = {"id": "basic", "size" : 32, "xVel" : 7, "yVel" : 7, "damage" : 1};
 
   var placeHolder = document.getElementById("player");
   element.insertBefore(basicEnemy, placeHolder);
@@ -280,7 +314,7 @@ function createFastEnemy()
   fastEnemy.style.height = 16 + "px";
   fastEnemy.style.top = 128 + (Math.round(Math.random() * window.innerHeight - 256)) + "px";
   fastEnemy.style.left = 128 + (Math.round(Math.random() * window.innerWidth - 256)) + "px";
-  fastEnemy.data = {"size" : 16, "xVel" : 5, "yVel" : 12, "damage" : .5};
+  fastEnemy.data = {"id": "fast", "size" : 16, "xVel" : 5, "yVel" : 12, "damage" : .5};
 
   var placeHolder = document.getElementById("player");
   element.insertBefore(fastEnemy, placeHolder);
@@ -301,10 +335,31 @@ function createSlowEnemy()
   slowEnemy.style.height = 32 + "px";
   slowEnemy.style.top = 128 + (Math.round(Math.random() * window.innerHeight - 256)) + "px";
   slowEnemy.style.left = 128 + (Math.round(Math.random() * window.innerWidth - 256)) + "px";
-  slowEnemy.data = {"size" : 32, "xVel" : 3, "yVel" : 3, "damage" : 2};
+  slowEnemy.data = {"id": "slow", "size" : 32, "xVel" : 3, "yVel" : 3, "damage" : 2};
 
   var placeHolder = document.getElementById("player");
   element.insertBefore(slowEnemy, placeHolder);
 
   enemies.push(slowEnemy);
+}
+
+function createSmartEnemy()
+{
+  var element = document.getElementById("background")
+  var smartEnemy = document.createElement("div");
+
+  var node = document.createTextNode("");
+  smartEnemy.appendChild(node);
+  smartEnemy.style.backgroundColor = "#FF00FF";
+  smartEnemy.style.position = "absolute";
+  smartEnemy.style.width = 32 + "px";
+  smartEnemy.style.height = 32 + "px";
+  smartEnemy.style.top = 50 + "vh"//128 + (Math.round(Math.random() * window.innerHeight - 256)) + "px";
+  smartEnemy.style.left =  50 + "vh"//128 + (Math.round(Math.random() * window.innerWidth - 256)) + "px";
+  smartEnemy.data = {"id" : "smart", "size" : 32, "speed" : 2, "damage" : 2};
+
+  var placeHolder = document.getElementById("player");
+  element.insertBefore(smartEnemy, placeHolder);
+
+  enemies.push(smartEnemy);
 }

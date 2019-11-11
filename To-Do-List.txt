@@ -1,0 +1,6 @@
+Enemy that follows player
+Death Screen/Reset
+Score System
+Health Packs
+High Score
+Boss
