@@ -10,8 +10,6 @@ var yOffset = 0;
 
 var speed = 8;
 
-var debug = false;
-
 var enemies = [];
 
 var timer = 0;
@@ -19,6 +17,13 @@ var timer = 0;
 var health = 200;
 
 var play = true;
+var dead = false;
+
+function init()
+{
+
+}
+
 
 // Key Pressed Funtion
 document.addEventListener('keydown', function(event) {
@@ -34,9 +39,6 @@ document.addEventListener('keydown', function(event) {
     }
     if(event.keyCode == 40) {
       down = speed;
-    }
-    if(event.keyCode == 77) {
-      debug = !debug;
     }
   }
   if(event.keyCode == 80) {
@@ -79,31 +81,42 @@ function tick() {
 tick();
 
 function update() {
-  if(play)
+  if(play && !dead)
   {
     spawner(timer);
     playerMovement();
     timer++;
     // Cycles through all the enemies
     enemyUpdate();
-
+    updateScore(timer);
   }
+}
+
+function updateScore(timer)
+{
+  var stats = document.getElementById("stats");
+  stats.innerHTML = "Health: " + Math.round(health / 2) + "<br>Score: " + Math.round(timer / 10) + "<br>Enemies: " + enemies.length;
+
+  var info = document.getElementById("info");
+  info.innerHTML = "Press R to Restart!";
+
+
 }
 
 function spawner(time)
 {
 
-  if(timer % 1000 == 100)
+  if(timer % 500 == 150)
   {
     createBasicEnemy();
   }
 
-  if(timer % 2300 == 1000)
+  if(timer % 750 == 350)
   {
     createFastEnemy();
   }
 
-  if(timer % 5000 == 3000)
+  if(timer % 1000 == 225)
   {
     createSlowEnemy();
   }
@@ -141,9 +154,6 @@ function playerMovement()
 
   xPos = clamp(xPos, 0, window.innerWidth - 48);
   yPos = clamp(yPos, 0, window.innerHeight - 48);
-
-  if(debug)   info(xPos, yPos);
-  if(!debug)  reset_info();
 
   player.style.left = xPos + "px";
   player.style.top = yPos + "px";
@@ -248,6 +258,11 @@ function loseHealth(damage)
   health = clamp(health, 0, 200);
   healthbar.style.width = health + "px";
 
+  if(health == 0)
+  {
+    dead = true;
+  }
+
 }
 
 function clamp(num, mini, maxi)
@@ -264,19 +279,6 @@ function clamp(num, mini, maxi)
   {
     return num;
   }
-}
-
-function info(xPos, yPos)
-{
-  var info = document.getElementById("info");
-  info.innerHTML = "X: " + xPos + "<br> Y: " + yPos;
-}
-
-function reset_info()
-{
-  var info = document.getElementById("info");
-  info.style.backgroundColor = "transparent"
-  info.innerHTML = "";
 }
 
 function createBasicEnemy()

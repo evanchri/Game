@@ -33,14 +33,25 @@ html
 {
   width: 200px;
   height: 32px;
-  top: 2vh;
-  left: 1vw;
+  top: 32px;
+  left: 32px;
   background-color: green;
   position: absolute;
 
 }
 
+#stats
+{
+  color: white;
+  top: 70px;
+  left: 32px;
+  position: absolute;
+}
+
 #info
 {
-  color:white;
+  color: white;
+  top: 96vh;
+  left: 32px;
+  position: absolute;
 }
